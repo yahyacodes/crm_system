@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import Sidebar from "../Components/Sidebar";
 import { BsPlusLg } from "react-icons/bs";
 
 const AddTasks = () => {
+  async function addTaskHandler(task) {
+    const response = await fetch(
+      "https://to-do-list-bb34f-default-rtdb.firebaseio.com/tasks.json",
+      {
+        method: "POST",
+        body: JSON.stringify(task),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  }
+
+  const titleRef = useRef("");
+  const descriptionRef = useRef("");
+  const dateRef = useRef("");
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    const task = {
+      title: titleRef.current.value,
+      description: descriptionRef.current.value,
+      date: dateRef.current.value,
+    };
+    addTaskHandler(task);
+  };
+
   return (
     <div className="flex justify-center min-h-screen">
       <Sidebar />
@@ -12,7 +42,10 @@ const AddTasks = () => {
           <BsPlusLg />
           <h2 className="text-lg font-semibold ml-2">Add Tasks</h2>
         </div>
-        <div className="grid grid-cols-1 grid-rows-3 gap-4 grid-flow-row-dense">
+        <form
+          onSubmit={submitHandler}
+          className="grid grid-cols-1 grid-rows-3 gap-4 grid-flow-row-dense"
+        >
           <div className="p-4 pr-6 bg-white border-l-8 border-transparent rounded-md shadow-md space-y-2">
             <input
               type="text"
@@ -40,7 +73,7 @@ const AddTasks = () => {
               </span>
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
