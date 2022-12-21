@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { AiOutlineClose } from "react-icons/ai";
+
 const TaskItems = (props) => {
   const [hoverOn, setHoverOn] = useState(false);
   const [isDone, setIsDone] = useState(false);
@@ -16,6 +18,23 @@ const TaskItems = (props) => {
     setIsDone(true);
   };
 
+  const dateDisplay = new Date();
+
+  const deleteTask = () => {
+    fetch(
+      `https://to-do-list-bb34f-default-rtdb.firebaseio.com/tasks/${props.id}.json`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
     <>
       <div className="flex justify-center ml-20">
@@ -27,14 +46,20 @@ const TaskItems = (props) => {
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
               >
-                <h1 className="font-medium text-gray-900 truncate">
-                  {props.title}
-                </h1>
+                <div className="grid grid-cols-2">
+                  <h1 className="font-medium text-gray-900 truncate">
+                    {props.title}
+                  </h1>
+                  <AiOutlineClose
+                    className="flex ml-56 cursor-pointer"
+                    onClick={deleteTask}
+                  />
+                </div>
                 <p className="text-base text-gray-500 truncate dark:text-gray-400">
                   {props.description}
                 </p>
                 <div className="inline-flex ml-80 text-xs font-semibold text-gray-300">
-                  {props.date}
+                  {dateDisplay.toLocaleDateString("en-UK")}
                 </div>
                 <div>
                   {hoverOn && (

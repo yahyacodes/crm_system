@@ -1,9 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 import Sidebar from "../Components/Sidebar";
 import { BsPlusLg } from "react-icons/bs";
 
 const AddTasks = () => {
+  const [titleInput, setTitleInput] = useState("");
+  const [descriptionInput, setDescriptionInput] = useState("");
+
   async function addTaskHandler(task) {
     const response = await fetch(
       "https://to-do-list-bb34f-default-rtdb.firebaseio.com/tasks.json",
@@ -16,7 +19,6 @@ const AddTasks = () => {
       }
     );
     const data = await response.json();
-    console.log(data);
   }
 
   const titleRef = useRef("");
@@ -25,6 +27,8 @@ const AddTasks = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    setTitleInput("");
+    setDescriptionInput("");
 
     const task = {
       title: titleRef.current.value,
@@ -48,13 +52,19 @@ const AddTasks = () => {
         >
           <div className="p-4 pr-6 bg-white border-l-8 border-transparent rounded-md shadow-md space-y-2">
             <input
+              ref={titleRef}
+              value={titleInput}
+              onChange={(event) => setTitleInput(event.target.value)}
               type="text"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm
-           rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               placeholder="Add Title"
               required
             />
             <textarea
+              ref={descriptionRef}
+              value={descriptionInput}
+              onChange={(event) => setDescriptionInput(event.target.value)}
               id="message"
               rows="4"
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-00 
