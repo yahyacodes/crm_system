@@ -1,94 +1,28 @@
+// Tasks Data, this page handles the data fetching
+// The data is fetched from firebase's real-time-database
 import React, { useState, useEffect } from "react";
 
+// Importing TaskItems
 import TaskItems from "./TaskItems";
 
-// const DUMMY_DATA = [
-//   {
-//     id: "t1",
-//     title: "Do some code first",
-//     description: "Define your variables before coding",
-//     date: "15-12-2022",
-//   },
-//   {
-//     id: "t2",
-//     title: "I want to code music player first",
-//     description: "I push it to github",
-//     date: "16-12-2022",
-//   },
-//   {
-//     id: "t3",
-//     title: "Do some code first",
-//     description: "Define your variables before coding",
-//     date: "17-12-2022",
-//   },
-//   {
-//     id: "t11",
-//     title: "Do some code first",
-//     description: "Define your variables before coding",
-//     date: "15-12-2022",
-//   },
-//   {
-//     id: "t22",
-//     title: "I want to code music player first",
-//     description: "I push it to github",
-//     date: "16-12-2022",
-//   },
-//   {
-//     id: "t33",
-//     title: "Do some code first",
-//     description: "Define your variables before coding",
-//     date: "17-12-2022",
-//   },
-//   {
-//     id: "t12",
-//     title: "Do some code first",
-//     description: "Define your variables before coding",
-//     date: "15-12-2022",
-//   },
-//   {
-//     id: "t32",
-//     title: "I want to code music player first",
-//     description: "I push it to github",
-//     date: "16-12-2022",
-//   },
-//   {
-//     id: "t34",
-//     title: "Do some code first",
-//     description: "Define your variables before coding",
-//     date: "17-12-2022",
-//   },
-//   {
-//     id: "t14",
-//     title: "Do some code first",
-//     description: "Define your variables before coding",
-//     date: "15-12-2022",
-//   },
-//   {
-//     id: "t24",
-//     title: "I want to code music player first",
-//     description: "I push it to github",
-//     date: "16-12-2022",
-//   },
-//   {
-//     id: "t35",
-//     title: "Do some code first",
-//     description: "Define your variables before coding",
-//     date: "17-12-2022",
-//   },
-// ];
-
+// TasksData component
 const TasksData = () => {
+  // Adding tasks made to database
   const [taskMade, setTaskMade] = useState([]);
 
+  // Fetching the data from database
   useEffect(() => {
+    // Handling fetch
     const fetchTasks = async () => {
       const response = await fetch(
         "https://to-do-list-bb34f-default-rtdb.firebaseio.com/tasks.json"
       );
+      // Handling the response
       const responseData = await response.json();
 
       const loadedTasks = [];
 
+      // Looping through the fetched data
       for (const key in responseData) {
         loadedTasks.push({
           id: key,
@@ -102,6 +36,7 @@ const TasksData = () => {
     fetchTasks();
   }, []);
 
+  // Mapping through the fetched data
   const taskList = taskMade.map((task) => (
     <TaskItems
       id={task.id}
@@ -112,7 +47,9 @@ const TasksData = () => {
     />
   ));
 
+  // Returning the fetched data
   return <div>{taskList}</div>;
 };
 
+// Exporting the component
 export default TasksData;
